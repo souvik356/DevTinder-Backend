@@ -11,6 +11,12 @@ authRouter.post('/signup',async(req,res)=>{
       const data = req.body
       Validation(data)
       const { firstName,lastName,emailID,password } = data
+      const IS_EMAILID_IN_DB = await User.findOne({"emailID" : emailID})
+      if(IS_EMAILID_IN_DB){
+        res.json({
+            message: `${IS_EMAILID_IN_DB.emailID} is already registered`
+        })
+      }
       const hashedPassword = await bcrypt.hash(password,10)
       const user = new User({
          firstName,
@@ -45,7 +51,7 @@ authRouter.post('/login',async (req,res) => {
         const isPasswordValid = await bcrypt.compare(password,user.password)
         if(isPasswordValid){
             const jwtToken = jwt.sign({_id: user._id},'DevTinder@123')
-            console.log(jwtToken);
+            // console.log(jwtToken);
             res.cookie("token",jwtToken,{
                 expiresIn: '7d'
             })
