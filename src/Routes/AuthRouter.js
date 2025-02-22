@@ -25,12 +25,18 @@ authRouter.post('/signup',async(req,res)=>{
          password: hashedPassword
       })
        await user.save()
-       res.json({
+       return res.json({
         message:"user is registered in DevTinder",
-        user
+        user,
+        success : true,
+        error : false
        })
    }catch(err){
-    res.status(400).send('user cannot be registered ' + err.message)
+    return res.status(500).json({
+        message : err,
+        success : false,
+        error : true
+    })
    }
 })
 
@@ -45,7 +51,11 @@ authRouter.post('/login',async (req,res) => {
         // console.log(user);
         
         if(!user){
-            throw new Error("Invalid Email address")
+            return res.status(400).json({
+                message :"Invalid email",
+                success: false,
+                error : true
+            })
         }
         // console.log(user.password);
         const isPasswordValid = await bcrypt.compare(password,user.password)
@@ -55,13 +65,26 @@ authRouter.post('/login',async (req,res) => {
             res.cookie("token",jwtToken,{
                 expiresIn: '7d'
             })
-            res.send("logged in successful")
+           return res.json({
+                message : 'Logged in successfull',
+                data : user,
+                success : true,
+                error: false
+            })
         }
         else{
-            res.status(400).send("Invalid password")
+            return res.status(400).json({
+                message :"Invalid password",
+                success: false,
+                error : true
+            })
         }
-    }catch(err){
-        res.status(400).send(`ERROR : ${err.message}`)
+    }catch(error){
+        return res.status(500).json({
+            message : error.message || error,
+            success: false,
+            error : true
+        })
     }
 })
 
@@ -69,7 +92,11 @@ authRouter.post('/logout',async(req,res)=>{
    res.cookie("token",null,{
     expiresIn: '0h'
    })
-   res.send('logout successfull')
+   return res.json({
+    message : 'logout successfull',
+    success : true,
+    error : false
+   })
 })
 
 module.exports = { authRouter }

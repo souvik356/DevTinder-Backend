@@ -74,7 +74,9 @@ connectionRouter.patch('/request/review/:status/:requestId',userAuth,async(req,r
 
         res.json({
             message: `Connection request ${status}`,
-            connectionRequest
+            data: connectionRequest,
+            success : true,
+            error : false
         })
 
      }catch(err){

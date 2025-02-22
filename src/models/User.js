@@ -47,22 +47,13 @@ const userSchema = mongoose.Schema({
     },
     about:{
         type: String,
-        maxLength: 60
+        maxLength: 200
     },
     age:{
         type: Number,
-        validate(value){
-            if(!value >= 16){
-               throw new Error('Age must be greater than 16')
-            }
-        }
     },
     gender:{
-        type: String,
-        enum:{
-            values:["male","female","others"],
-            message: '`{VALUE}` is not supported'
-        }
+        type: String
     },
     skills:{
         type: [String],

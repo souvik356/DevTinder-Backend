@@ -10,19 +10,25 @@ profileRouter.get("/profile/view", userAuth, (req, res) => {
   try {
     const loggedInUser = req.user;
     // console.log(loggedInUser);
-    res.json(loggedInUser);
+    res.json({
+      data:loggedInUser,
+      message : 'profile',
+      success : true,
+      error : false
+    });
   } catch (err) {
-    res.status(400).send(err.message);
+    res.status(500).send(err.message);
   }
 });
 
 profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
   try {
     const loggedInUser = req.user;
-    console.log(loggedInUser);
-    console.log(loggedInUser._id);
+    // console.log(loggedInUser);
+    // console.log(loggedInUser._id);
 
     const dataToBeUpdated = req.body;
+    const {firstName,lastName,photoURL,about,gender,skills,age} = req.body
     // console.log(dataToBeUpdated);
 
     const ALLOWED_UPDATES = [
@@ -42,19 +48,39 @@ profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
     if (!isAllowed_updates) {
       throw new Error("Updates not allowed");
     }
+    if(!["male","female","others"].includes(gender)){
+       return res.status(400).json({
+        message : "invalid gender",
+        success : false,
+        error  : true
+       })
+    }
+    if(age < 16){
+      return res.status(400).json({
+        message : "Age below 16 years are not allowed",
+        success : false,
+        error  : true
+      })
+    }
 
     const user = await User.findByIdAndUpdate(
       { _id: loggedInUser._id },
       dataToBeUpdated,
-      { runValidators: true }
+      { new: true, runValidators: true }
     );
 
-    res.json({
+    return res.json({
       message: `${user.firstName}'s data is updated `,
-      user,
+      data : user,
+      success : true,
+      error : false
     });
   } catch (err) {
-    res.status(400).send(err.message);
+    return res.status(500).json({
+    message : err.message || err,
+    success : false,
+    error: true
+    });
   }
 });
 

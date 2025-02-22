@@ -6,6 +6,11 @@ const userAuth =async(req,res,next)=>{
         const cookie = req.cookies
       //   console.log(cookie);
         const { token } = cookie
+        if(!token){
+          return res.status(401).json({
+            message : 'please login'
+          })
+        }
       //   console.log(token);
         const decodeMessage = jwt.verify(token,'DevTinder@123')
       //   console.log(decodeMessage);

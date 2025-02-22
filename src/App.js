@@ -1,10 +1,19 @@
 const express = require("express");
 const cookieParser = require('cookie-parser')
 const { connectDb } = require("./utils/Database");
-const app = express();
+const cors = require('cors')
 
+const app = express();  
+
+const corsOption = {
+  origin : 'http://localhost:5173',
+  credentials : true
+}
+
+app.use(cors(corsOption))
 app.use(express.json())
 app.use(cookieParser())
+
 
 const { authRouter } = require('./Routes/AuthRouter')
 const { profileRouter } = require('./Routes/ProfileRouter')
