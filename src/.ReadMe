@@ -1,0 +1,55 @@
+EC2 :- Elastic cloud compute
+
+Create an EC2 instance in AWS
+
+
+- while creating an EC2 make one .pem file which is a secret key which will help us to connect to remote ubuntu machine
+- .pem file will be stored in download file and we have to make changes in read write execute for file using chmod 400 file.pem
+- after than we can connect to remote ubuntu machine
+- we have connected using SSH command
+- after connecting to remote ubuntu machine we need to install node in our ubuntu machine we will be checking our version in local machine in which our project is running
+- we will install same node version in ubuntu remote machine
+
+-- FrontEnd:-
+- after install node , we will clone frontend and backend code into our ubuntu remote machine
+- go to frontend code , cd frontend
+- npm i
+ - npm run build - dist folder will be created
+ - sudo apt update 
+ - sudo apt install nginx (know what is nginx and what are it's use explore about)
+ - sudo systemctl start nginx
+ - sudo systemctl start nginx
+ - sudo systemctl enable nginx
+ - sudo scp -r dist/* /var/www/htm (copy items of dist to /var/www/html)
+
+ - enable port :80 of our instance (change inbound security for our aws)
+
+-- Backend :-
+
+  -- you can update your code using git and never forget to add script in your package.json which has start script
+  -- add IP of ur EC2 in my mongodb so that EC2 can access it's data
+  -- add security group for my backend and add port number there
+  -- after that we can do npm run start in our remote ubuntu machine
+  -- we can install process manager like pm2 to make our backend server available 24x7 hours  -- pm2 start npm -- start
+  -- pm2 logs - to check logs why my application is not running
+  -- pm2 flush to clear my logs
+  -- pm2 list <name> (It will give list such as name, status)
+  -- pm2 stop <name> -- (It stops my server temporarily)
+  -- pm2 delete <name> -- (It delete my processes It need to again to pm2 start npm -- start)
+  -- pm2 start npm --name "DevTinder-Backend" --start
+
+  --path for configuring nginx - /etc/nginx/site-available/default
+
+  nginx config :- 
+        server_name - 13.126.128.79
+        location /api/ {
+        proxy_pass http://localhost:7777/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+  --  }
+
+    -- restart nginx - sudo systemctl restart nginx
+
+    -- modify the BASE_URL in front-end projwct to - /api
