@@ -2,7 +2,6 @@ EC2 :- Elastic cloud compute
 
 Create an EC2 instance in AWS
 
-
 - while creating an EC2 make one .pem file which is a secret key which will help us to connect to remote ubuntu machine
 - .pem file will be stored in download file and we have to make changes in read write execute for file using chmod 400 file.pem
 - after than we can connect to remote ubuntu machine
@@ -10,19 +9,18 @@ Create an EC2 instance in AWS
 - after connecting to remote ubuntu machine we need to install node in our ubuntu machine we will be checking our version in local machine in which our project is running
 - we will install same node version in ubuntu remote machine
 
--- FrontEnd:-
+- FrontEnd:-
 - after install node , we will clone frontend and backend code into our ubuntu remote machine
 - go to frontend code , cd frontend
 - npm i
- - npm run build - dist folder will be created
- - sudo apt update 
- - sudo apt install nginx (know what is nginx and what are it's use explore about)
- - sudo systemctl start nginx
- - sudo systemctl start nginx
- - sudo systemctl enable nginx
- - sudo scp -r dist/* /var/www/htm (copy items of dist to /var/www/html)
-
- - enable port :80 of our instance (change inbound security for our aws)
+- npm run build - dist folder will be created
+- sudo apt update 
+- sudo apt install nginx (know what is nginx and what are it's use explore about)
+- sudo systemctl start nginx
+- sudo systemctl start nginx
+- sudo systemctl enable nginx
+- sudo scp -r dist/* /var/www/htm (copy items of dist to /var/www/html)
+- enable port :80 of our instance (change inbound security for our aws)
 
 -- Backend :-
 
