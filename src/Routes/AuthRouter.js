@@ -18,12 +18,14 @@ authRouter.post('/signup',async(req,res)=>{
         })
       }
       const hashedPassword = await bcrypt.hash(password,10)
+
       const user = new User({
          firstName,
          lastName,
          emailID,
          password: hashedPassword
       })
+
        await user.save()
        return res.json({
         message:"user is registered in DevTinder",
